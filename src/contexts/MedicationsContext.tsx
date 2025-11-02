@@ -5,24 +5,17 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import type { ReactNode } from "react";
-import type { Medication } from "../types";
+import type {
+  Medication,
+  MedicationsContextType,
+  MedicationsProviderProps,
+} from "../types/medication";
 import { storageUtils } from "../utils/storage";
 import { useAuthContext } from "./AuthContext";
-
-interface MedicationsContextType {
-  medications: Medication[];
-  addMedication: (medication: Omit<Medication, "id">) => void;
-  removeMedication: (id: string) => void;
-}
 
 const MedicationsContext = createContext<MedicationsContextType | undefined>(
   undefined
 );
-
-interface MedicationsProviderProps {
-  children: ReactNode;
-}
 
 export const MedicationsProvider: React.FC<MedicationsProviderProps> = ({
   children,
@@ -31,7 +24,6 @@ export const MedicationsProvider: React.FC<MedicationsProviderProps> = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const { user } = useAuthContext();
 
-  // Load medications when user changes
   useEffect(() => {
     if (user) {
       const userMedications = storageUtils.getMedications(user.username);
@@ -43,7 +35,6 @@ export const MedicationsProvider: React.FC<MedicationsProviderProps> = ({
     }
   }, [user]);
 
-  // Save medications to localStorage whenever medications change
   useEffect(() => {
     if (user && isInitialized) {
       storageUtils.saveMedications(user.username, medications);
@@ -53,7 +44,7 @@ export const MedicationsProvider: React.FC<MedicationsProviderProps> = ({
   const addMedication = useCallback((medication: Omit<Medication, "id">) => {
     const newMedication: Medication = {
       ...medication,
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
     };
     setMedications((prev) => [...prev, newMedication]);
   }, []);

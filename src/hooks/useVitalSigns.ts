@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { VitalSigns } from "../types";
+import type { VitalSigns } from "../types/vitalSigns";
 import { storageUtils } from "../utils/storage";
 import { useAuthContext } from "../contexts/AuthContext";
 
@@ -31,7 +31,7 @@ export const useVitalSigns = () => {
     (vitals: Omit<VitalSigns, "id" | "timestamp">) => {
       const newVitals: VitalSigns = {
         ...vitals,
-        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
         timestamp: new Date().toISOString(),
       };
       setVitalSigns((prev) => [newVitals, ...prev]); // Add to beginning for reverse chronological order

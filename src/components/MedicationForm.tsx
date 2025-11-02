@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useMedicationsContext } from "../contexts/MedicationsContext";
+import type { FormErrors } from "../types/common";
 
 const MedicationForm: React.FC = () => {
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
   const [frequency, setFrequency] = useState("");
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const { addMedication } = useMedicationsContext();
 
   const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
+    const newErrors: FormErrors = {};
 
     if (!name.trim()) {
       newErrors.name = "Medication name is required";

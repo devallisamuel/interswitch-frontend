@@ -5,23 +5,17 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import type { ReactNode } from "react";
-import type { VitalSigns } from "../types";
+import type {
+  VitalSigns,
+  VitalSignsContextType,
+  VitalSignsProviderProps,
+} from "../types/vitalSigns";
 import { storageUtils } from "../utils/storage";
 import { useAuthContext } from "./AuthContext";
-
-interface VitalSignsContextType {
-  vitalSigns: VitalSigns[];
-  addVitalSigns: (vitals: Omit<VitalSigns, "id" | "timestamp">) => void;
-}
 
 const VitalSignsContext = createContext<VitalSignsContextType | undefined>(
   undefined
 );
-
-interface VitalSignsProviderProps {
-  children: ReactNode;
-}
 
 export const VitalSignsProvider: React.FC<VitalSignsProviderProps> = ({
   children,
@@ -30,7 +24,6 @@ export const VitalSignsProvider: React.FC<VitalSignsProviderProps> = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const { user } = useAuthContext();
 
-  // Load vital signs when user changes
   useEffect(() => {
     if (user) {
       const userVitals = storageUtils.getVitalSigns(user.username);
@@ -42,7 +35,6 @@ export const VitalSignsProvider: React.FC<VitalSignsProviderProps> = ({
     }
   }, [user]);
 
-  // Save vital signs to localStorage whenever they change
   useEffect(() => {
     if (user && isInitialized) {
       storageUtils.saveVitalSigns(user.username, vitalSigns);
@@ -53,10 +45,10 @@ export const VitalSignsProvider: React.FC<VitalSignsProviderProps> = ({
     (vitals: Omit<VitalSigns, "id" | "timestamp">) => {
       const newVitals: VitalSigns = {
         ...vitals,
-        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
         timestamp: new Date().toISOString(),
       };
-      setVitalSigns((prev) => [newVitals, ...prev]); // Add to beginning for reverse chronological order
+      setVitalSigns((prev) => [newVitals, ...prev]);
     },
     []
   );

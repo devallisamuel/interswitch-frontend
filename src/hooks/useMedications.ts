@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { Medication } from "../types";
+import type { Medication } from "../types/medication";
 import { storageUtils } from "../utils/storage";
 import { useAuthContext } from "../contexts/AuthContext";
 
@@ -30,7 +30,7 @@ export const useMedications = () => {
   const addMedication = useCallback((medication: Omit<Medication, "id">) => {
     const newMedication: Medication = {
       ...medication,
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
     };
     setMedications((prev) => [...prev, newMedication]);
   }, []);

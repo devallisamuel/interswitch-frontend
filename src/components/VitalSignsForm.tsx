@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { useVitalSignsContext } from "../contexts/VitalSignsContext";
+import type { FormErrors } from "../types/common";
 
 const VitalSignsForm: React.FC = () => {
   const [systolic, setSystolic] = useState("");
   const [diastolic, setDiastolic] = useState("");
   const [heartRate, setHeartRate] = useState("");
   const [weight, setWeight] = useState("");
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const { addVitalSigns } = useVitalSignsContext();
 
   const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
+    const newErrors: FormErrors = {};
 
     // Validate systolic blood pressure
     const systolicNum = parseInt(systolic);

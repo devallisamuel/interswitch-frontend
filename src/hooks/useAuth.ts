@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { User } from "../types";
+import type { User } from "../types/auth";
 
 const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
 const AUTH_STORAGE_KEY = "health-tracker-auth";
@@ -8,7 +8,6 @@ export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [lastActivity, setLastActivity] = useState<number>(Date.now());
 
-  // Load user from localStorage on mount
   useEffect(() => {
     const savedUser = localStorage.getItem(AUTH_STORAGE_KEY);
     if (savedUser) {
@@ -21,12 +20,10 @@ export const useAuth = () => {
     }
   }, []);
 
-  // Update last activity time
   const updateActivity = useCallback(() => {
     setLastActivity(Date.now());
   }, []);
 
-  // Set up activity listeners
   useEffect(() => {
     const events = [
       "mousedown",
@@ -52,7 +49,6 @@ export const useAuth = () => {
     };
   }, [updateActivity]);
 
-  // Auto-logout timer
   useEffect(() => {
     if (!user) return;
 
